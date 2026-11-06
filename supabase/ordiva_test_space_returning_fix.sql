@@ -1,0 +1,1 @@
+alter policy read_spaces on public.ordiva_test_spaces using(owner_id=(select auth.uid()) or ordiva_test_private.member(id));
