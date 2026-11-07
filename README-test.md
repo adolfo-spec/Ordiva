@@ -1,6 +1,6 @@
 # Ordiva Familia · prueba independiente
 
-La página `ordiva-familia-test.html` conserva el diseño y no modifica index.html ni ordiva-sincronizacion.html. Trabaja exclusivamente con tablas ordiva_test_*; las tareas actuales no se importan ni sobrescriben.
+La página `ordiva-familia-test.html` conserva el diseño y no modifica index.html ni ordiva-sincronizacion.html. Trabaja exclusivamente con tablas ordiva_test_*; las tareas actuales no se sobrescriben. La versión 0.2 permite copiarlas manualmente desde ordiva_data a Mi espacio con Recuperar mis datos. IDs estables por cuenta evitan duplicados y no actualizan elementos importados anteriormente. Los datos que solo existen en el almacenamiento local de otro origen no están disponibles para esta copia.
 
 Acceso con correo y contraseña de Supabase. Las cuentas nuevas deben confirmar su correo. El servicio de correo y sus límites dependen de la configuración de Supabase.
 
@@ -13,3 +13,5 @@ Validación realizada: sintaxis JavaScript; pantalla de acceso en navegador; tra
 Los asesores de seguridad no señalan las nuevas tablas/funciones. Detectan avisos preexistentes en funciones public.ordiva_is_member, public.ordiva_owner_membership, public.rls_auto_enable y protección de contraseñas filtradas deshabilitada. Se mantienen sin cambios para preservar el entorno actual.
 
 No fusionar la rama ni reemplazar la versión actual hasta verificar la prueba. Eliminar el despliegue de prueba no borra sus tablas; la reversión del frontend consiste en seguir usando la URL actual.
+
+Prueba 0.2: node test-import.cjs valida identificadores estables, deduplicación, cuentas separadas, fechas y textos inválidos y que la fuente no se modifica. La actualización periódica se pausa mientras escribes en un campo.

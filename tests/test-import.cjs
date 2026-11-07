@@ -1,0 +1,21 @@
+const {readFileSync}=require('node:fs');
+const vm=require('node:vm');
+const assert=require('node:assert/strict');
+const ctx={crypto:require('node:crypto').webcrypto,TextEncoder};
+vm.createContext(ctx);vm.runInContext(readFileSync(__dirname+'/legacy-import.js','utf8'),ctx);
+(async()=>{
+ const original={tasks:[{id:1,text:'Mi tarea',done:true},{id:1,text:'Mi tarea',done:true}],events:[{id:2,text:'Cena',date:'2026-11-07'},{text:'Fecha incorrecta',date:'2026-02-30'}],items:[null,{text:'   '},{text:'Leche'},{text:'x'.repeat(121)}]};
+ const copy=JSON.stringify(original);
+ const a=await ctx.legacyEntries(original,'account-a');
+ const b=await ctx.legacyEntries(original,'account-a');
+ const c=await ctx.legacyEntries(original,'account-b');
+ assert.equal(a.entries.length,3);assert.equal(a.skipped,4);
+ assert.equal(JSON.stringify(a),JSON.stringify(b));
+ assert.notEqual(a.entries[0].id,c.entries[0].id);
+ assert.equal(a.entries[0].done,true);
+ assert(a.entries.every(x=>x.space_id===null&&x.user_id==='account-a'));
+ assert.match(a.entries[0].id,/^[0-9a-f]{8}-[0-9a-f]{4}-5[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/);
+ assert.equal(JSON.stringify(original),copy);
+ assert.equal((await ctx.legacyEntries(null,'account-a')).entries.length,0);
+ console.log('PASS: stable imports, deduplication, account isolation, validation, private scope, source unchanged');
+})().catch(e=>{console.error(e);process.exitCode=1});
